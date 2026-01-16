@@ -28,13 +28,16 @@ app.use("/api/v1/openai", require("./routes/openaiRoutes"));
 const __dirname1 = path.resolve();
 
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname1, "client/build")));
+  const clientBuildPath = path.join(__dirname1, "client/build");
 
   
-  app.get("/:path*", (req, res) => {
-    res.sendFile(path.join(__dirname1, "client/build", "index.html"));
+  app.use(express.static(clientBuildPath));
+
+  app.get(/^\/(?!api).*/, (req, res) => {
+    res.sendFile(path.join(clientBuildPath, "index.html"));
   });
 }
+
 
 
 app.use(errorHandler);
