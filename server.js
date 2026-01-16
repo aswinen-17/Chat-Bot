@@ -1,3 +1,4 @@
+const path = require("path");
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
@@ -24,6 +25,18 @@ const PORT = process.env.PORT || 8080;
 
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/openai", require("./routes/openaiRoutes"));
+
+const __dirname1 = path.resolve();
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname1, "client/build")));
+
+  app.get("*", (req, res) => {
+    res.sendFile(
+      path.resolve(__dirname1, "client", "build", "index.html")
+    );
+  });
+}
 
 app.listen(PORT, () => {
   console.log(
