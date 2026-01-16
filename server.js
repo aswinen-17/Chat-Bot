@@ -14,6 +14,7 @@ connectDB();
 
 const app = express();
 
+
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -25,16 +26,20 @@ app.use("/api/v1/openai", require("./routes/openaiRoutes"));
 
 
 const __dirname1 = path.resolve();
+
 if (process.env.NODE_ENV === "production") {
+  
   app.use(express.static(path.join(__dirname1, "client/build")));
 
-  app.get("*", (req, res) => {
+  
+  app.get("/*", (req, res) => {
     res.sendFile(path.join(__dirname1, "client/build", "index.html"));
   });
 }
 
 
 app.use(errorHandler);
+
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
